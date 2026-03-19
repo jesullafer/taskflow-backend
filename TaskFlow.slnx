@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="E:/Mis Proyectos/taskflow-backend/TaskFlow/TaskFlow.Domain/TaskFlow.Domain.csproj" Id="460e41e7-af6f-4283-8fab-bc3912f275a5" />
+  <Project Path="TaskFlow.API/TaskFlow.API.csproj" Id="6d03d393-c2f6-4794-81f5-1675c2d6804f" />
+  <Project Path="TaskFlow.Application/TaskFlow.Application.csproj" Id="84f506cd-14fb-4c21-bbad-565d8f6e04d2" />
+  <Project Path="TaskFlow.Infrastructure/TaskFlow.Infrastructure.csproj" Id="1fa92163-5c9f-4099-9bcb-16216543168d" />
+</Solution>
