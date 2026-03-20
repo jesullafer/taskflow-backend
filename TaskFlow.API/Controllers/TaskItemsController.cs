@@ -1,36 +1,30 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TaskFlow.Application.DTOs;
-using TaskFlow.Application.Interfaces;
-using TaskFlow.Domain.Entities;
+using TaskFlow.Application.UseCases.CreateTaskItem;
+using TaskFlow.Application.UseCases.GetAllTaskItems;
 
 namespace TaskFlow.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class TaskItemsController : ControllerBase
-{
-    private readonly ITaskItemRepository _repository;
+public class TaskItemsController : ControllerBase{
 
-    public TaskItemsController(ITaskItemRepository repository)
+    private readonly CreateTaskItemUseCase _createTaskItemUseCase;
+    private readonly GetAllTaskItemsUseCase _getAllTaskItemsUseCase;
+
+    public TaskItemsController(
+        CreateTaskItemUseCase createTaskItemUseCase,
+        GetAllTaskItemsUseCase getAllTaskItemsUseCase)
     {
-        _repository = repository;
+        _createTaskItemUseCase = createTaskItemUseCase;
+        _getAllTaskItemsUseCase = getAllTaskItemsUseCase;
     }
+
 
     [HttpPost]
     public async Task<IActionResult> Create(CreateTaskItemRequestDto request)
     {
-        var task = new TaskItem(request.Title, request.Description);
-
-        await _repository.AddAsync(task);
-
-        var response = new TaskItemResponseDto
-        {
-            Id = task.Id,
-            Title = task.Title,
-            Description = task.Description,
-            IsCompleted = task.IsCompleted,
-            CreatedAt = task.CreatedAt
-        };
+        var response = await _createTaskItemUseCase.ExecuteAsync(request);
 
         return Ok(response);
     }
@@ -38,17 +32,7 @@ public class TaskItemsController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
-        var tasks = await _repository.GetAllAsync();
-
-        var response = tasks.Select(task => new TaskItemResponseDto
-        {
-            Id = task.Id,
-            Title = task.Title,
-            Description = task.Description,
-            IsCompleted = task.IsCompleted,
-            CreatedAt = task.CreatedAt
-        });
-
+        var response = await _getAllTaskItemsUseCase.ExecuteAsync();
         return Ok(response);
     }
 }

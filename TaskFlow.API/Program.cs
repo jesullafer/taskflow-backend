@@ -1,4 +1,6 @@
 using TaskFlow.Application.Interfaces;
+using TaskFlow.Application.UseCases.CreateTaskItem;
+using TaskFlow.Application.UseCases.GetAllTaskItems;
 using TaskFlow.Infrastructure.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,6 +13,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddSingleton<ITaskItemRepository, InMemoryTaskItemRepository>();
+builder.Services.AddScoped<CreateTaskItemUseCase>();
+builder.Services.AddScoped<GetAllTaskItemsUseCase>();
 
 var app = builder.Build();
 
