@@ -2,6 +2,7 @@
 using TaskFlow.Application.DTOs;
 using TaskFlow.Application.UseCases.CreateTaskItem;
 using TaskFlow.Application.UseCases.GetAllTaskItems;
+using TaskFlow.Application.UseCases.GetTaskItemById;
 
 namespace TaskFlow.API.Controllers;
 
@@ -11,13 +12,16 @@ public class TaskItemsController : ControllerBase{
 
     private readonly CreateTaskItemUseCase _createTaskItemUseCase;
     private readonly GetAllTaskItemsUseCase _getAllTaskItemsUseCase;
+    private readonly GetTaskItemByIdUseCase _getTaskItemByIdUseCase;
 
     public TaskItemsController(
         CreateTaskItemUseCase createTaskItemUseCase,
-        GetAllTaskItemsUseCase getAllTaskItemsUseCase)
+        GetAllTaskItemsUseCase getAllTaskItemsUseCase,
+        GetTaskItemByIdUseCase getTaskItemByIdUseCase)
     {
         _createTaskItemUseCase = createTaskItemUseCase;
         _getAllTaskItemsUseCase = getAllTaskItemsUseCase;
+        _getTaskItemByIdUseCase = getTaskItemByIdUseCase;
     }
 
 
@@ -34,5 +38,16 @@ public class TaskItemsController : ControllerBase{
     {
         var response = await _getAllTaskItemsUseCase.ExecuteAsync();
         return Ok(response);
+    }
+
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetById(Guid id)
+    {
+        var result = await _getTaskItemByIdUseCase.ExecuteAsync(id);
+
+        if (result is null)
+            return NotFound();
+
+        return Ok(result);
     }
 }
