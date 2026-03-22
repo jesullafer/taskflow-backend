@@ -1,5 +1,6 @@
 using TaskFlow.Application.Interfaces;
 using TaskFlow.Application.UseCases.CreateTaskItem;
+using TaskFlow.Application.UseCases.DeleteTaskItem;
 using TaskFlow.Application.UseCases.GetAllTaskItems;
 using TaskFlow.Application.UseCases.GetTaskItemById;
 using TaskFlow.Application.UseCases.UpdateTaskItem;
@@ -19,6 +20,7 @@ builder.Services.AddScoped<CreateTaskItemUseCase>();
 builder.Services.AddScoped<GetAllTaskItemsUseCase>();
 builder.Services.AddScoped<GetTaskItemByIdUseCase>();
 builder.Services.AddScoped<UpdateTaskItemUseCase>();
+builder.Services.AddScoped<DeleteTaskItemUseCase>();
 
 var app = builder.Build();
 

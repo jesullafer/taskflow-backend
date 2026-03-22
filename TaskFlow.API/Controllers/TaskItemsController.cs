@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TaskFlow.Application.DTOs;
 using TaskFlow.Application.UseCases.CreateTaskItem;
+using TaskFlow.Application.UseCases.DeleteTaskItem;
 using TaskFlow.Application.UseCases.GetAllTaskItems;
 using TaskFlow.Application.UseCases.GetTaskItemById;
 using TaskFlow.Application.UseCases.UpdateTaskItem;
@@ -15,17 +16,20 @@ public class TaskItemsController : ControllerBase{
     private readonly GetAllTaskItemsUseCase _getAllTaskItemsUseCase;
     private readonly GetTaskItemByIdUseCase _getTaskItemByIdUseCase;
     private readonly UpdateTaskItemUseCase _updateTaskItemUseCase;
+    private readonly DeleteTaskItemUseCase _deleteTaskItemUseCase;
 
     public TaskItemsController(
         CreateTaskItemUseCase createTaskItemUseCase,
         GetAllTaskItemsUseCase getAllTaskItemsUseCase,
         GetTaskItemByIdUseCase getTaskItemByIdUseCase,
-        UpdateTaskItemUseCase updateTaskItemUseCase)
+        UpdateTaskItemUseCase updateTaskItemUseCase,
+        DeleteTaskItemUseCase deleteTaskItemUseCase)
     {
         _createTaskItemUseCase = createTaskItemUseCase;
         _getAllTaskItemsUseCase = getAllTaskItemsUseCase;
         _getTaskItemByIdUseCase = getTaskItemByIdUseCase;
         _updateTaskItemUseCase = updateTaskItemUseCase;
+        _deleteTaskItemUseCase = deleteTaskItemUseCase;
     }
 
 
@@ -64,5 +68,16 @@ public class TaskItemsController : ControllerBase{
             return NotFound();
 
         return Ok(result);
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete(Guid id)
+    {
+        var deleted = await _deleteTaskItemUseCase.ExecuteAsync(id);
+
+        if (!deleted)
+            return NotFound();
+
+        return NoContent();
     }
 }
