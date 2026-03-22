@@ -3,6 +3,7 @@ using TaskFlow.Application.DTOs;
 using TaskFlow.Application.UseCases.CreateTaskItem;
 using TaskFlow.Application.UseCases.GetAllTaskItems;
 using TaskFlow.Application.UseCases.GetTaskItemById;
+using TaskFlow.Application.UseCases.UpdateTaskItem;
 
 namespace TaskFlow.API.Controllers;
 
@@ -13,15 +14,18 @@ public class TaskItemsController : ControllerBase{
     private readonly CreateTaskItemUseCase _createTaskItemUseCase;
     private readonly GetAllTaskItemsUseCase _getAllTaskItemsUseCase;
     private readonly GetTaskItemByIdUseCase _getTaskItemByIdUseCase;
+    private readonly UpdateTaskItemUseCase _updateTaskItemUseCase;
 
     public TaskItemsController(
         CreateTaskItemUseCase createTaskItemUseCase,
         GetAllTaskItemsUseCase getAllTaskItemsUseCase,
-        GetTaskItemByIdUseCase getTaskItemByIdUseCase)
+        GetTaskItemByIdUseCase getTaskItemByIdUseCase,
+        UpdateTaskItemUseCase updateTaskItemUseCase)
     {
         _createTaskItemUseCase = createTaskItemUseCase;
         _getAllTaskItemsUseCase = getAllTaskItemsUseCase;
         _getTaskItemByIdUseCase = getTaskItemByIdUseCase;
+        _updateTaskItemUseCase = updateTaskItemUseCase;
     }
 
 
@@ -44,6 +48,17 @@ public class TaskItemsController : ControllerBase{
     public async Task<IActionResult> GetById(Guid id)
     {
         var result = await _getTaskItemByIdUseCase.ExecuteAsync(id);
+
+        if (result is null)
+            return NotFound();
+
+        return Ok(result);
+    }
+
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Update(Guid id, UpdateTaskItemRequestDto request)
+    {
+        var result = await _updateTaskItemUseCase.ExecuteAsync(id, request);
 
         if (result is null)
             return NotFound();
